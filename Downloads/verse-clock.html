@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verse Clock — VC-01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --body-top: #2e2e2e;
+    --body-mid: #1e1e1e;
+    --body-bot: #141414;
+    --display-bg: #e9e5dc;
+    --display-ink: #18161a;
+    --bezel: #111;
+    --label: rgba(255,255,255,0.18);
+    --label-dim: rgba(255,255,255,0.07);
+    --indicator-off: #1a2e1a;
+    --indicator-on: #5cb85c;
+    --glow: rgba(92,184,92,0.55);
+    --screw: #222;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    font-family: 'IBM Plex Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Ambient desk surface */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 100%, rgba(40,40,40,0.9) 0%, transparent 70%),
+      radial-gradient(ellipse 120% 60% at 50% 50%, rgba(18,18,18,1) 0%, #050505 100%);
+    z-index: 0;
+  }
+
+  .scene {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* ── DEVICE SHELL ── */
+  .device {
+    width: 580px;
+    background:
+      linear-gradient(168deg,
+        var(--body-top) 0%,
+        var(--body-mid) 38%,
+        var(--body-bot) 100%);
+    border-radius: 14px;
+    padding: 26px 28px 22px;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.055),
+      0 1px 0 rgba(255,255,255,0.04),
+      0 4px 12px rgba(0,0,0,0.7),
+      0 16px 40px rgba(0,0,0,0.6),
+      0 40px 80px rgba(0,0,0,0.45);
+  }
+
+  /* Brushed aluminum micro-texture */
+  .device::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background-image:
+      repeating-linear-gradient(
+        88deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(255,255,255,0.012) 3px,
+        rgba(255,255,255,0.012) 4px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Bottom edge highlight — suggests thickness */
+  .device::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 6%;
+    right: 6%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent);
+    border-radius: 0 0 14px 14px;
+  }
+
+  /* Screws */
+  .screw {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #3a3a3a, #0d0d0d);
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.7),
+      inset 0 1px 2px rgba(255,255,255,0.06);
+    z-index: 2;
+  }
+  .screw::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(38deg);
+    width: 5px; height: 0.8px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 1px;
+  }
+  .screw.tl { top: 11px; left: 11px; }
+  .screw.tr { top: 11px; right: 11px; }
+  .screw.bl { bottom: 11px; left: 11px; }
+  .screw.br { bottom: 11px; right: 11px; }
+
+  /* ── HEADER ROW ── */
+  .hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .brand {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 200;
+    font-size: 8.5px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--label);
+    user-select: none;
+  }
+
+  .hdr-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .model-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.15em;
+    color: var(--label-dim);
+    user-select: none;
+  }
+
+  /* LED indicator */
+  .led {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--indicator-off);
+    box-shadow: 0 0 0 1.5px rgba(0,0,0,0.6);
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+  .led.on {
+    background: var(--indicator-on);
+    box-shadow: 0 0 0 1.5px rgba(0,0,0,0.4), 0 0 8px var(--glow), 0 0 18px var(--glow);
+  }
+
+  /* ── DISPLAY BEZEL ── */
+  .bezel {
+    background: var(--bezel);
+    border-radius: 7px;
+    padding: 3px;
+    position: relative;
+    z-index: 1;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.9),
+      inset 0 1px 3px rgba(0,0,0,0.8);
+  }
+
+  /* ── E-INK DISPLAY ── */
+  .display {
+    background: var(--display-bg);
+    border-radius: 5px;
+    padding: 34px 40px 36px;
+    min-height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 0 2px 10px rgba(0,0,0,0.22),
+      inset 0 0 0 1px rgba(0,0,0,0.12);
+  }
+
+  /* Paper-grain texture */
+  .display::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.6;
+    pointer-events: none;
+    border-radius: 5px;
+  }
+
+  /* Subtle vignette on display */
+  .display::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.08) 100%);
+    pointer-events: none;
+  }
+
+  .poem-wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .poem-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 300;
+    font-size: 14.5px;
+    line-height: 2;
+    color: var(--display-ink);
+    letter-spacing: 0.03em;
+    white-space: pre-wrap;
+    min-height: 90px;
+  }
+
+  /* Blinking cursor */
+  .cursor {
+    display: inline-block;
+    width: 7px;
+    height: 1em;
+    background: var(--display-ink);
+    vertical-align: text-bottom;
+    margin-left: 1px;
+    border-radius: 1px;
+    animation: blink 1.1s step-end infinite;
+    position: relative;
+    top: 1px;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Loading pulse on display */
+  .display.loading .poem-text {
+    opacity: 0.4;
+  }
+
+  /* ── FOOTER ROW ── */
+  .ftr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .clock-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.14);
+    user-select: none;
+  }
+
+  .vent-slots {
+    display: flex;
+    gap: 3px;
+    opacity: 0.3;
+  }
+  .vent-slots span {
+    display: block;
+    width: 1.5px;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 1px;
+  }
+
+  .series-label {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 200;
+    font-size: 7.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.07);
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="device">
+    <div class="screw tl"></div>
+    <div class="screw tr"></div>
+    <div class="screw bl"></div>
+    <div class="screw br"></div>
+
+    <div class="hdr">
+      <span class="brand">Verse Clock</span>
+      <div class="hdr-right">
+        <span class="model-tag">VC-01</span>
+        <div class="led" id="led"></div>
+      </div>
+    </div>
+
+    <div class="bezel">
+      <div class="display" id="display">
+        <div class="poem-wrap">
+          <div class="poem-text" id="poem"><span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ftr">
+      <span class="clock-time" id="clockTime">—</span>
+      <div class="vent-slots">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <span class="series-label">Braun Studio</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const poemEl  = document.getElementById('poem');
+  const timeEl  = document.getElementById('clockTime');
+  const led     = document.getElementById('led');
+  const display = document.getElementById('display');
+
+  let lastMinute = -1;
+  let typing = false;
+
+  // ── Time helpers ──────────────────────────────────────────────────────────
+  function getNow() {
+    const d = new Date();
+    let h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return {
+      h, m, s, ampm,
+      label: `${h}:${String(m).padStart(2,'0')} ${ampm}`,
+      display: `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`
+    };
+  }
+
+  // ── Typewriter ────────────────────────────────────────────────────────────
+  function typeText(text) {
+    return new Promise(resolve => {
+      typing = true;
+      poemEl.innerHTML = '<span class="cursor"></span>';
+      let i = 0;
+
+      function next() {
+        if (i >= text.length) {
+          poemEl.innerHTML = escapeLines(text) + '<span class="cursor"></span>';
+          typing = false;
+          return resolve();
+        }
+        const ch = text[i++];
+        poemEl.innerHTML = escapeLines(text.slice(0, i)) + '<span class="cursor"></span>';
+        const delay = ch === '\n' ? 90 : 22 + Math.random() * 18;
+        setTimeout(next, delay);
+      }
+      next();
+    });
+  }
+
+  function escapeLines(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+  }
+
+  // ── API call ──────────────────────────────────────────────────────────────
+  async function fetchPoem(timeLabel) {
+    led.classList.add('on');
+    display.classList.add('loading');
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{
+            role: 'user',
+            content: `Write a short rhyming poem (exactly 4 lines) about the time being ${timeLabel}. Be evocative, precise, and elegant — no whimsy, no clichés. Weave the hour and minute naturally into the verse. No title. No explanation. Only the 4 lines.`
+          }]
+        })
+      });
+
+      const data = await res.json();
+      return data.content[0].text.trim();
+    } catch {
+      return `The hour rests at ${timeLabel},\nThe world turns at its own pace,\nA minute sealed in amber light,\nTime etched in silent space.`;
+    } finally {
+      led.classList.remove('on');
+      display.classList.remove('loading');
+    }
+  }
+
+  // ── Main loop ─────────────────────────────────────────────────────────────
+  async function tick() {
+    const t = getNow();
+    timeEl.textContent = t.display;
+
+    if (t.m !== lastMinute && !typing) {
+      lastMinute = t.m;
+      const poem = await fetchPoem(t.label);
+      await typeText(poem);
+    }
+  }
+
+  // Init immediately, then poll every second
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
