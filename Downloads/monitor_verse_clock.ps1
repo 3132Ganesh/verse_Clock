@@ -1,43 +1,37 @@
 # PowerShell monitor script for Verse Clock
 # ------------------------------------------------------------
-# This script runs in the background (started at user logon) and
-#  • launches the Verse Clock HTML in a frameless Chrome window
-#    when the session is unlocked
-#  • shows the same window as a "screensaver" after a period of
-#    inactivity (idleThresholdSec)
-#  • hides/closes the window as soon as user activity resumes
+# Fixes: 
+# 1. Runs Chrome in an isolated profile so it doesn't delegate to your main browser (fixes the "popping up every second" bug).
+# 2. Snappier response: Hides the clock exactly when you move the mouse after unlocking.
 # ------------------------------------------------------------
 
-# ==== Configuration ==================================================
 $HtmlPath   = "C:\Users\Ganeshnayak\Downloads\verse-clock.html"
 $ChromePath = "$env:ProgramFiles\Google\Chrome\Application\chrome.exe"
-# Size of the window (pixels)
+$UserDataDir = "$env:TEMP\VerseClockProfile"
+
+# Window settings
 $WindowWidth  = 400
 $WindowHeight = 300
-# Position of the window (pixels from top‑left). Adjust for your screen.
-$PosX = 1600   # e.g., right‑side on a 1920‑width monitor
-$PosY = 900    # e.g., near the bottom
-# Idle time (seconds) after which the clock appears as a screensaver
-$idleThresholdSec = 60
-# Polling interval (seconds) – how often we check idle time
-$pollIntervalSec = 5
-# ======================================================================
+$PosX = 1600
+$PosY = 900
 
-# Global variable to hold the Chrome process object
+# Timing settings
+$idleThresholdSec = 60
+$pollIntervalSec = 2  # Checked every 2 seconds for faster hiding
+
 $global:ClockProcess = $null
+$global:UnlockInputTime = 0
 
 function Start-Clock {
-    if (-not (Test-Path $ChromePath)) {
-        Write-Error "Chrome not found at $ChromePath"
-        return
-    }
-    # If already running, do nothing
+    if (-not (Test-Path $ChromePath)) { return }
     if ($global:ClockProcess -and -not $global:ClockProcess.HasExited) { return }
+    
     $args = @(
         "--app=file:///$HtmlPath",
         "--window-size=$WindowWidth,$WindowHeight",
         "--window-position=$PosX,$PosY",
-        "--disable-infobars"
+        "--disable-infobars",
+        "--user-data-dir=`"$UserDataDir`""
     )
     $global:ClockProcess = Start-Process -FilePath $ChromePath -ArgumentList $args -PassThru
 }
@@ -50,7 +44,7 @@ function Stop-Clock {
 }
 
 # ------------------------------------------------------------
-# Idle‑time detection (via GetLastInputInfo)
+# Idle-time detection
 # ------------------------------------------------------------
 Add-Type @"
 using System;
@@ -62,42 +56,49 @@ public struct LASTINPUTINFO {
 public static class Idle {
     [DllImport("user32.dll")]
     public static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-    public static uint MillisecondsSinceLastInput() {
+    public static uint GetLastInputTime() {
         LASTINPUTINFO lii = new LASTINPUTINFO();
         lii.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(LASTINPUTINFO));
         if (!GetLastInputInfo(ref lii)) return 0;
-        return (uint)Environment.TickCount - lii.dwTime;
+        return lii.dwTime;
     }
 }
 "@
 
-function Get-IdleSeconds {
-    return [int]([Idle]::MillisecondsSinceLastInput() / 1000)
-}
-
 # ------------------------------------------------------------
-# Session unlock handling (Microsoft.Win32.SystemEvents)
+# Session unlock handling
 # ------------------------------------------------------------
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action { Stop-Clock }
 
 $null = Register-ObjectEvent -InputObject ([Microsoft.Win32.SystemEvents]) -EventName SessionSwitch -Action {
     param($sender, $e)
     if ($e.Reason -eq [Microsoft.Win32.SessionSwitchReason]::SessionUnlock) {
+        $global:UnlockInputTime = [Idle]::GetLastInputTime()
         Start-Clock
     }
 }
 
 # ------------------------------------------------------------
-# Main idle‑monitor loop – runs until the PowerShell process exits
+# Main Loop
 # ------------------------------------------------------------
 while ($true) {
-    $idle = Get-IdleSeconds
-    if ($idle -ge $idleThresholdSec) {
-        # User is idle → ensure the clock is visible
+    $currentInputTime = [Idle]::GetLastInputTime()
+    # Handle TickCount wrapping around (happens every ~49 days)
+    $tick = [Environment]::TickCount
+    if ($tick -lt $currentInputTime) { $tick = $currentInputTime } 
+    $idleSec = ($tick - $currentInputTime) / 1000
+
+    if ($idleSec -ge $idleThresholdSec) {
+        # User has been idle for the threshold -> Show screensaver
         Start-Clock
     } else {
-        # User active → hide the clock
-        Stop-Clock
+        # User is NOT idle (active).
+        # Check if they made a NEW input *after* the PC was unlocked.
+        # We add 1000ms to ignore the last keystrokes of typing the password.
+        if ($currentInputTime -gt ($global:UnlockInputTime + 1000)) {
+            Stop-Clock
+            $global:UnlockInputTime = 0 # Reset so it stays hidden
+        }
     }
     Start-Sleep -Seconds $pollIntervalSec
 }
