@@ -6,11 +6,11 @@ This guide explains how to deploy the Verse Clock so that it automatically runs 
 
 1. **Google Chrome** must be installed (the script uses Chrome in "app" mode to create a frameless window).
 2. The HTML file `verse-clock.html` must be saved at:
-   `C:\Users\Ganeshnayak\Downloads\verse-clock.html`
+   `C:\Users....\verse-clock.html`
 3. The PowerShell monitor script `monitor_verse_clock.ps1` must be saved at:
-   `C:\Users\Ganeshnayak\Downloads\monitor_verse_clock.ps1`
+   `C:\Users\.....\monitor_verse_clock.ps1`
 
-*(Note: Both of these files have already been created for you in these locations).*
+*(Note: Both of these files have already been created for you in same locations).*
 
 ---
 
