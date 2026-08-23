@@ -3,47 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verse Clock — VC-01</title>
+<title>Verse Clock — VC-02 PRO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,300&family=IBM+Plex+Sans:wght@200;300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --body-top: #2e2e2e;
-    --body-mid: #1e1e1e;
-    --body-bot: #141414;
-    --display-bg: #e9e5dc;
-    --display-ink: #18161a;
-    --bezel: #111;
-    --label: rgba(255,255,255,0.18);
-    --label-dim: rgba(255,255,255,0.07);
-    --indicator-off: #1a2e1a;
-    --indicator-on: #5cb85c;
-    --glow: rgba(92,184,92,0.55);
-    --screw: #222;
+  /* ── THEME TOKENS ── */
+  :root, [data-theme="braun"] {
+    --bg-ambient: #070709;
+    --desk-glow: rgba(45, 45, 55, 0.4);
+    --shell-bg-top: #2c2c30;
+    --shell-bg-mid: #1c1c1f;
+    --shell-bg-bot: #121214;
+    --shell-border: rgba(255, 255, 255, 0.08);
+    --display-bg: #ece8de;
+    --display-ink: #161518;
+    --display-sub: #636059;
+    --bezel-bg: #0e0e10;
+    --label-main: rgba(255, 255, 255, 0.35);
+    --label-dim: rgba(255, 255, 255, 0.12);
+    --accent-color: #5cb85c;
+    --accent-glow: rgba(92, 184, 92, 0.5);
+    --led-off: #162416;
+    --screw-head: radial-gradient(circle at 35% 30%, #444, #0d0d0d);
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-sans: 'IBM Plex Sans', sans-serif;
   }
 
+  [data-theme="cyberpunk"] {
+    --bg-ambient: #030408;
+    --desk-glow: rgba(0, 240, 255, 0.15);
+    --shell-bg-top: #151928;
+    --shell-bg-mid: #0b0d18;
+    --shell-bg-bot: #05060d;
+    --shell-border: rgba(0, 240, 255, 0.25);
+    --display-bg: #090d16;
+    --display-ink: #00f0ff;
+    --display-sub: #ff0055;
+    --bezel-bg: #03050a;
+    --label-main: rgba(0, 240, 255, 0.6);
+    --label-dim: rgba(255, 0, 85, 0.4);
+    --accent-color: #00f0ff;
+    --accent-glow: rgba(0, 240, 255, 0.7);
+    --led-off: #002b3d;
+    --screw-head: radial-gradient(circle at 35% 30%, #1e293b, #030712);
+  }
+
+  [data-theme="nordic"] {
+    --bg-ambient: #121416;
+    --desk-glow: rgba(200, 210, 220, 0.1);
+    --shell-bg-top: #363c44;
+    --shell-bg-mid: #252930;
+    --shell-bg-bot: #181b20;
+    --shell-border: rgba(255, 255, 255, 0.1);
+    --display-bg: #f4f2ed;
+    --display-ink: #2b3038;
+    --display-sub: #78808a;
+    --bezel-bg: #191c21;
+    --label-main: rgba(255, 255, 255, 0.4);
+    --label-dim: rgba(255, 255, 255, 0.15);
+    --accent-color: #8ab4f8;
+    --accent-glow: rgba(138, 180, 248, 0.5);
+    --led-off: #1b263b;
+    --screw-head: radial-gradient(circle at 35% 30%, #4a5568, #1a202c);
+  }
+
+  [data-theme="amber"] {
+    --bg-ambient: #090703;
+    --desk-glow: rgba(255, 170, 0, 0.15);
+    --shell-bg-top: #251e14;
+    --shell-bg-mid: #16120b;
+    --shell-bg-bot: #0d0a06;
+    --shell-border: rgba(255, 170, 0, 0.2);
+    --display-bg: #140d02;
+    --display-ink: #ffb000;
+    --display-sub: #cc7a00;
+    --bezel-bg: #090602;
+    --label-main: rgba(255, 176, 0, 0.5);
+    --label-dim: rgba(255, 176, 0, 0.2);
+    --accent-color: #ffb000;
+    --accent-glow: rgba(255, 176, 0, 0.7);
+    --led-off: #332200;
+    --screw-head: radial-gradient(circle at 35% 30%, #3d2c1d, #0d0a06);
+  }
+
+  [data-theme="emerald"] {
+    --bg-ambient: #030a06;
+    --desk-glow: rgba(16, 185, 129, 0.2);
+    --shell-bg-top: #10261b;
+    --shell-bg-mid: #0a1912;
+    --shell-bg-bot: #040d09;
+    --shell-border: rgba(16, 185, 129, 0.25);
+    --display-bg: #061e14;
+    --display-ink: #34d399;
+    --display-sub: #10b981;
+    --bezel-bg: #020a06;
+    --label-main: rgba(52, 211, 153, 0.5);
+    --label-dim: rgba(52, 211, 153, 0.2);
+    --accent-color: #10b981;
+    --accent-glow: rgba(16, 185, 129, 0.7);
+    --led-off: #032b1b;
+    --screw-head: radial-gradient(circle at 35% 30%, #1e3a2b, #040d09);
+  }
+
+  /* ── GLOBAL STYLES ── */
   body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #0a0a0a;
-    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg-ambient);
+    font-family: var(--font-sans);
+    color: #e2e8f0;
     overflow: hidden;
+    user-select: none;
+    transition: background 0.5s ease;
   }
 
-  /* Ambient desk surface */
+  /* Ambient desk surface glow */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 70% 45% at 50% 100%, rgba(40,40,40,0.9) 0%, transparent 70%),
-      radial-gradient(ellipse 120% 60% at 50% 50%, rgba(18,18,18,1) 0%, #050505 100%);
+      radial-gradient(ellipse 65% 50% at 50% 60%, var(--desk-glow) 0%, transparent 80%),
+      radial-gradient(ellipse 120% 70% at 50% 100%, rgba(0,0,0,0.85) 0%, transparent 100%);
+    pointer-events: none;
     z-index: 0;
+    transition: background 0.5s ease;
   }
 
   .scene {
@@ -52,85 +142,69 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 680px;
   }
 
   /* ── DEVICE SHELL ── */
   .device {
-    width: 580px;
-    background:
-      linear-gradient(168deg,
-        var(--body-top) 0%,
-        var(--body-mid) 38%,
-        var(--body-bot) 100%);
-    border-radius: 14px;
-    padding: 26px 28px 22px;
+    width: 100%;
+    max-width: 620px;
+    background: linear-gradient(165deg, var(--shell-bg-top) 0%, var(--shell-bg-mid) 42%, var(--shell-bg-bot) 100%);
+    border-radius: 18px;
+    padding: 26px 30px 22px;
     position: relative;
     box-shadow:
-      0 0 0 1px rgba(255,255,255,0.055),
-      0 1px 0 rgba(255,255,255,0.04),
-      0 4px 12px rgba(0,0,0,0.7),
-      0 16px 40px rgba(0,0,0,0.6),
-      0 40px 80px rgba(0,0,0,0.45);
+      0 0 0 1px var(--shell-border),
+      0 2px 4px rgba(0, 0, 0, 0.4),
+      0 12px 28px rgba(0, 0, 0, 0.6),
+      0 35px 70px rgba(0, 0, 0, 0.7);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Brushed aluminum micro-texture */
+  /* Brushed texture overlay */
   .device::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 14px;
-    background-image:
-      repeating-linear-gradient(
-        88deg,
-        transparent 0px,
-        transparent 3px,
-        rgba(255,255,255,0.012) 3px,
-        rgba(255,255,255,0.012) 4px
-      );
+    border-radius: 18px;
+    background-image: repeating-linear-gradient(
+      88deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(255, 255, 255, 0.015) 3px,
+      rgba(255, 255, 255, 0.015) 4px
+    );
     pointer-events: none;
     z-index: 0;
   }
 
-  /* Bottom edge highlight — suggests thickness */
-  .device::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 6%;
-    right: 6%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent);
-    border-radius: 0 0 14px 14px;
-  }
-
-  /* Screws */
+  /* Hardware Screws */
   .screw {
     position: absolute;
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #3a3a3a, #0d0d0d);
-    box-shadow:
-      0 0 0 1px rgba(0,0,0,0.7),
-      inset 0 1px 2px rgba(255,255,255,0.06);
+    background: var(--screw-head);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.12);
     z-index: 2;
   }
   .screw::after {
     content: '';
     position: absolute;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(38deg);
-    width: 5px; height: 0.8px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 1px;
+    transform: translate(-50%, -50%) rotate(42deg);
+    width: 6px; height: 1px;
+    background: rgba(0,0,0,0.65);
   }
-  .screw.tl { top: 11px; left: 11px; }
-  .screw.tr { top: 11px; right: 11px; }
-  .screw.bl { bottom: 11px; left: 11px; }
-  .screw.br { bottom: 11px; right: 11px; }
+  .screw.tl { top: 12px; left: 12px; }
+  .screw.tr { top: 12px; right: 12px; }
+  .screw.bl { bottom: 12px; left: 12px; }
+  .screw.br { bottom: 12px; right: 12px; }
 
-  /* ── HEADER ROW ── */
+  /* ── HEADER BAR ── */
   .hdr {
     display: flex;
     align-items: center;
@@ -140,179 +214,597 @@
     z-index: 1;
   }
 
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
   .brand {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 200;
-    font-size: 8.5px;
-    letter-spacing: 0.42em;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.38em;
     text-transform: uppercase;
-    color: var(--label);
-    user-select: none;
+    color: var(--label-main);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .model-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--label-dim);
+    background: rgba(0,0,0,0.25);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.04);
   }
 
   .hdr-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
 
-  .model-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 7.5px;
-    letter-spacing: 0.15em;
-    color: var(--label-dim);
-    user-select: none;
+  .date-badge {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    color: var(--label-main);
+    opacity: 0.85;
   }
 
-  /* LED indicator */
+  .status-led-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
   .led {
-    width: 5px;
-    height: 5px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: var(--indicator-off);
-    box-shadow: 0 0 0 1.5px rgba(0,0,0,0.6);
-    transition: background 0.4s, box-shadow 0.4s;
+    background: var(--led-off);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,0,0,0.5);
+    transition: background 0.3s, box-shadow 0.3s;
   }
   .led.on {
-    background: var(--indicator-on);
-    box-shadow: 0 0 0 1.5px rgba(0,0,0,0.4), 0 0 8px var(--glow), 0 0 18px var(--glow);
+    background: var(--accent-color);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow);
   }
 
   /* ── DISPLAY BEZEL ── */
   .bezel {
-    background: var(--bezel);
-    border-radius: 7px;
-    padding: 3px;
+    background: var(--bezel-bg);
+    border-radius: 10px;
+    padding: 4px;
     position: relative;
     z-index: 1;
     box-shadow:
       0 0 0 1px rgba(0,0,0,0.9),
-      inset 0 1px 3px rgba(0,0,0,0.8);
+      inset 0 2px 5px rgba(0,0,0,0.9),
+      0 2px 8px rgba(0,0,0,0.5);
+    transition: background 0.4s ease;
   }
 
-  /* ── E-INK DISPLAY ── */
+  /* ── DISPLAY SCREEN ── */
   .display {
     background: var(--display-bg);
-    border-radius: 5px;
-    padding: 34px 40px 36px;
-    min-height: 190px;
+    border-radius: 7px;
+    padding: 26px 34px 24px;
+    min-height: 220px;
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
     position: relative;
     overflow: hidden;
     box-shadow:
-      inset 0 2px 10px rgba(0,0,0,0.22),
-      inset 0 0 0 1px rgba(0,0,0,0.12);
+      inset 0 3px 12px rgba(0,0,0,0.25),
+      inset 0 0 0 1px rgba(0,0,0,0.15);
+    transition: background 0.4s ease, color 0.4s ease;
   }
 
-  /* Paper-grain texture */
+  /* E-ink paper grain texture */
   .display::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.6;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    opacity: 0.7;
     pointer-events: none;
-    border-radius: 5px;
+    z-index: 0;
   }
 
-  /* Subtle vignette on display */
+  /* Screen inner lighting & vignette */
   .display::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 5px;
-    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.08) 100%);
+    border-radius: 7px;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.12) 100%);
     pointer-events: none;
+    z-index: 1;
   }
 
+  /* Scanline CRT mode styling */
+  [data-theme="cyberpunk"] .display::after,
+  [data-theme="amber"] .display::after {
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+    background-size: 100% 3px, 100% 100%;
+  }
+
+  /* Display Top Bar */
+  .display-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+  }
+  [data-theme="cyberpunk"] .display-hdr,
+  [data-theme="amber"] .display-hdr,
+  [data-theme="emerald"] .display-hdr {
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+
+  .digital-time {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    color: var(--display-ink);
+  }
+
+  .time-period-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--display-sub);
+    font-weight: 500;
+  }
+
+  /* Poem Container */
   .poem-wrap {
     position: relative;
-    z-index: 1;
-    width: 100%;
+    z-index: 2;
+    margin: 18px 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
   }
 
   .poem-text {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: var(--font-mono);
     font-weight: 300;
-    font-size: 14.5px;
-    line-height: 2;
+    font-size: 15px;
+    line-height: 1.9;
     color: var(--display-ink);
     letter-spacing: 0.03em;
     white-space: pre-wrap;
-    min-height: 90px;
+    width: 100%;
+    transition: opacity 0.3s ease;
   }
 
-  /* Blinking cursor */
+  /* Cursor */
   .cursor {
     display: inline-block;
-    width: 7px;
-    height: 1em;
+    width: 8px;
+    height: 1.1em;
     background: var(--display-ink);
     vertical-align: text-bottom;
-    margin-left: 1px;
+    margin-left: 2px;
     border-radius: 1px;
     animation: blink 1.1s step-end infinite;
     position: relative;
-    top: 1px;
+    top: 2px;
   }
   @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
   }
 
-  /* Loading pulse on display */
-  .display.loading .poem-text {
-    opacity: 0.4;
+  /* Display Footer Bar */
+  .display-ftr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(0,0,0,0.1);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--display-sub);
+    letter-spacing: 0.1em;
+  }
+  [data-theme="cyberpunk"] .display-ftr,
+  [data-theme="amber"] .display-ftr,
+  [data-theme="emerald"] .display-ftr {
+    border-top-color: rgba(255,255,255,0.1);
   }
 
-  /* ── FOOTER ROW ── */
+  .seconds-bar-container {
+    width: 100px;
+    height: 3px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  [data-theme="cyberpunk"] .seconds-bar-container,
+  [data-theme="amber"] .seconds-bar-container,
+  [data-theme="emerald"] .seconds-bar-container {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .seconds-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--display-ink);
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
+
+  /* E-Ink Flash Refresh Animation */
+  .display.eink-refresh {
+    animation: einkFlash 0.45s ease-in-out forwards;
+  }
+  @keyframes einkFlash {
+    0% { filter: invert(0); }
+    40% { filter: invert(1); }
+    70% { filter: invert(0.8); }
+    100% { filter: invert(0); }
+  }
+
+  /* ── DEVICE FOOTER & CONTROLS ── */
   .ftr {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 16px;
+    margin-top: 18px;
     position: relative;
     z-index: 1;
   }
 
-  .clock-time {
-    font-family: 'IBM Plex Mono', monospace;
+  .ctrl-btns {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn {
+    background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom-color: rgba(0,0,0,0.4);
+    color: var(--label-main);
+    font-family: var(--font-mono);
     font-size: 9.5px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.14);
-    user-select: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .btn:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .btn svg {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
   }
 
   .vent-slots {
     display: flex;
-    gap: 3px;
-    opacity: 0.3;
+    gap: 3.5px;
+    opacity: 0.25;
   }
   .vent-slots span {
     display: block;
-    width: 1.5px;
-    height: 10px;
-    background: rgba(255,255,255,0.2);
+    width: 2px;
+    height: 12px;
+    background: #fff;
     border-radius: 1px;
   }
 
-  .series-label {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 200;
-    font-size: 7.5px;
-    letter-spacing: 0.32em;
+  .studio-label {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 8.5px;
+    letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.07);
-    user-select: none;
+    color: var(--label-dim);
+  }
+
+  /* ── EXTERNAL CONTROL BAR (TOP FLOATING) ── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 620px;
+    padding: 0 4px;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .theme-selector {
+    display: flex;
+    align-items: center;
+    background: rgba(18, 18, 22, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .theme-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .theme-dot:hover {
+    transform: scale(1.15);
+  }
+  .theme-dot.active {
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.4);
+  }
+  .theme-dot[data-t="braun"] { background: #e9e5dc; }
+  .theme-dot[data-t="cyberpunk"] { background: #00f0ff; }
+  .theme-dot[data-t="nordic"] { background: #8ab4f8; }
+  .theme-dot[data-t="amber"] { background: #ffb000; }
+  .theme-dot[data-t="emerald"] { background: #10b981; }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .icon-btn {
+    background: rgba(18, 18, 22, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--label-main);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: scale(1.08);
+  }
+  .icon-btn.active {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+  }
+  .icon-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  /* ── MODAL & DRAWER OVERLAYS ── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal {
+    background: #16171a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    transform: translateY(15px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .overlay.open .modal {
+    transform: translateY(0);
+  }
+
+  .modal-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .modal-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+  }
+  .close-btn:hover { color: #fff; }
+
+  .setting-row {
+    margin-bottom: 16px;
+  }
+  .setting-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #a0aec0;
+    margin-bottom: 6px;
+  }
+  .setting-input, .setting-select {
+    width: 100%;
+    background: #0d0e10;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .setting-input:focus, .setting-select:focus {
+    border-color: var(--accent-color);
+  }
+
+  .history-list {
+    max-height: 320px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 4px;
+  }
+  .history-item {
+    background: #0d0e10;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 12px 14px;
+    position: relative;
+  }
+  .history-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent-color);
+    margin-bottom: 6px;
+  }
+  .history-poem {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+  }
+  .history-copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.05);
+    border: none;
+    color: #94a3b8;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    cursor: pointer;
+  }
+  .history-copy:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(50px);
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid var(--accent-color);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  @media (max-width: 500px) {
+    .scene { padding: 10px; }
+    .device { padding: 20px 18px 16px; }
+    .display { padding: 20px 20px 18px; min-height: 190px; }
+    .poem-text { font-size: 13.5px; }
+    .top-bar { max-width: 100%; }
   }
 </style>
 </head>
-<body>
+<body data-theme="braun">
 
 <div class="scene">
+  <!-- Top Floating Controls -->
+  <div class="top-bar">
+    <div class="theme-selector" title="Switch Device Theme">
+      <div class="theme-dot active" data-t="braun" title="Braun Classic"></div>
+      <div class="theme-dot" data-t="cyberpunk" title="Cyber OLED"></div>
+      <div class="theme-dot" data-t="nordic" title="Nordic Paper"></div>
+      <div class="theme-dot" data-t="amber" title="Retro Amber"></div>
+      <div class="theme-dot" data-t="emerald" title="Glass Emerald"></div>
+    </div>
+
+    <div class="top-actions">
+      <button class="icon-btn" id="audioToggle" title="Toggle Typing Sounds">
+        <svg id="audioIcon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
+      <button class="icon-btn" id="historyToggle" title="View Poem History">
+        <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.25 2.52.77-1.28-3.52-2.09V8z"/></svg>
+      </button>
+      <button class="icon-btn" id="settingsToggle" title="Device Settings">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      </button>
+      <button class="icon-btn" id="fullscreenToggle" title="Toggle Fullscreen">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hardware Enclosure -->
   <div class="device">
     <div class="screw tl"></div>
     <div class="screw tr"></div>
@@ -320,70 +812,320 @@
     <div class="screw br"></div>
 
     <div class="hdr">
-      <span class="brand">Verse Clock</span>
-      <div class="hdr-right">
-        <span class="model-tag">VC-01</span>
-        <div class="led" id="led"></div>
+      <div class="brand-group">
+        <span class="brand">Verse Clock</span>
+        <span class="model-tag">VC-02 PRO</span>
       </div>
-    </div>
-
-    <div class="bezel">
-      <div class="display" id="display">
-        <div class="poem-wrap">
-          <div class="poem-text" id="poem"><span class="cursor"></span></div>
+      <div class="hdr-right">
+        <span class="date-badge" id="dateBadge">SUN 23 AUG</span>
+        <div class="status-led-group" title="Sync Status">
+          <div class="led" id="led"></div>
         </div>
       </div>
     </div>
 
+    <!-- Screen Bezel -->
+    <div class="bezel">
+      <div class="display" id="display">
+        <div class="display-hdr">
+          <span class="digital-time" id="digitalTime">12:48:18 PM</span>
+          <span class="time-period-tag" id="periodTag">MIDDAY VERSE</span>
+        </div>
+
+        <div class="poem-wrap">
+          <div class="poem-text" id="poem"><span class="cursor"></span></div>
+        </div>
+
+        <div class="display-ftr">
+          <span id="poemMeta">VERSE #01 • OPENROUTER ACTIVE</span>
+          <div class="seconds-bar-container">
+            <div class="seconds-bar-fill" id="secondsFill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hardware Bottom Control Strip -->
     <div class="ftr">
-      <span class="clock-time" id="clockTime">—</span>
+      <div class="ctrl-btns">
+        <button class="btn" id="refreshBtn" title="Generate New Verse Now">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          NEW VERSE
+        </button>
+      </div>
+
       <div class="vent-slots">
         <span></span><span></span><span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
-      <span class="series-label">Braun Studio</span>
+
+      <span class="studio-label">BRAUN STUDIO</span>
     </div>
   </div>
 </div>
 
+<!-- History Drawer Modal -->
+<div class="overlay" id="historyOverlay">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">📜 Verse Archive</span>
+      <button class="close-btn" id="closeHistory">✕</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <!-- Dynamic history items -->
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">⚙️ Device Settings</span>
+      <button class="close-btn" id="closeSettings">✕</button>
+    </div>
+    <div class="setting-row">
+      <label class="setting-label">AI Provider</label>
+      <select class="setting-select" id="providerSelect">
+        <option value="openrouter">OpenRouter AI (Active)</option>
+        <option value="anthropic">Anthropic Direct API</option>
+        <option value="local">Matrix Local Fallback</option>
+      </select>
+    </div>
+    <div class="setting-row" id="openrouterKeyRow">
+      <label class="setting-label">OpenRouter API Key</label>
+      <input type="password" class="setting-input" id="openrouterKeyInput" placeholder="sk-or-v1-..." />
+    </div>
+    <div class="setting-row" id="modelRow">
+      <label class="setting-label">OpenRouter Model</label>
+      <select class="setting-select" id="modelSelect">
+        <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet (Recommended)</option>
+        <option value="google/gemini-2.5-flash">Gemini 2.5 Flash</option>
+        <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+        <option value="deepseek/deepseek-chat">DeepSeek Chat</option>
+      </select>
+    </div>
+    <div class="setting-row" id="anthropicKeyRow">
+      <label class="setting-label">Anthropic API Key (Optional)</label>
+      <input type="password" class="setting-input" id="apiKeyInput" placeholder="sk-ant-api..." />
+    </div>
+    <div class="setting-row">
+      <label class="setting-label">Poetic Style</label>
+      <select class="setting-select" id="styleSelect">
+        <option value="evocative">Atmospheric & Evocative</option>
+        <option value="zen">Zen & Minimalist</option>
+        <option value="cyber">Cyberpunk & Speculative</option>
+        <option value="classic">Classic Rhyming Stanzas</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <label class="setting-label">Typewriter Typing Speed</label>
+      <select class="setting-select" id="speedSelect">
+        <option value="22">Balanced (Default)</option>
+        <option value="10">Fast</option>
+        <option value="45">Slow & Deliberate</option>
+        <option value="0">Instant Display</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">Poem copied to clipboard</div>
+
 <script>
-  const poemEl  = document.getElementById('poem');
-  const timeEl  = document.getElementById('clockTime');
-  const led     = document.getElementById('led');
-  const display = document.getElementById('display');
+  // OPENROUTER API KEY (Configured via UI Settings)
+  const DEFAULT_OPENROUTER_KEY = '';
+
+  // ── STATE & STORAGE ───────────────────────────────────────────────────────
+  const poemEl       = document.getElementById('poem');
+  const digitalTime  = document.getElementById('digitalTime');
+  const periodTag    = document.getElementById('periodTag');
+  const dateBadge    = document.getElementById('dateBadge');
+  const poemMeta     = document.getElementById('poemMeta');
+  const secondsFill  = document.getElementById('secondsFill');
+  const led          = document.getElementById('led');
+  const display      = document.getElementById('display');
+  const toast        = document.getElementById('toast');
 
   let lastMinute = -1;
   let typing = false;
+  let audioEnabled = localStorage.getItem('vc_audio') === 'true';
+  let historyData = JSON.parse(localStorage.getItem('vc_history') || '[]');
+  let poemCounter = parseInt(localStorage.getItem('vc_counter') || '1');
 
-  // ── Time helpers ──────────────────────────────────────────────────────────
+  // Update UI with stored audio state
+  if (audioEnabled) document.getElementById('audioToggle').classList.add('active');
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('vc_theme') || 'braun';
+  document.body.setAttribute('data-theme', savedTheme);
+  document.querySelectorAll('.theme-dot').forEach(d => {
+    d.classList.toggle('active', d.getAttribute('data-t') === savedTheme);
+  });
+
+  // Settings elements
+  const providerSelect     = document.getElementById('providerSelect');
+  const openrouterKeyInput = document.getElementById('openrouterKeyInput');
+  const modelSelect        = document.getElementById('modelSelect');
+  const apiKeyInput        = document.getElementById('apiKeyInput');
+  const styleSelect        = document.getElementById('styleSelect');
+  const speedSelect        = document.getElementById('speedSelect');
+
+  providerSelect.value     = localStorage.getItem('vc_provider') || 'openrouter';
+  openrouterKeyInput.value = localStorage.getItem('vc_openrouter_key') || DEFAULT_OPENROUTER_KEY;
+  modelSelect.value        = localStorage.getItem('vc_model') || 'anthropic/claude-3.5-sonnet';
+  apiKeyInput.value        = localStorage.getItem('vc_apikey') || '';
+  styleSelect.value        = localStorage.getItem('vc_style') || 'evocative';
+  speedSelect.value        = localStorage.getItem('vc_speed') || '22';
+
+  // ── WEB AUDIO SYNTHESIZER (No external sound files) ───────────────────────
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  function playKeyClick() {
+    if (!audioEnabled) return;
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(400 + Math.random() * 200, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.015);
+      
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.015);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.015);
+    } catch(e) {}
+  }
+
+  function playBellChime() {
+    if (!audioEnabled) return;
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.4);
+      
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.4);
+    } catch(e) {}
+  }
+
+  // ── RICH LOCAL POETIC MATRIX (Offline / Default Fallback) ─────────────────
+  const POETRY_DATABASE = {
+    morning: [
+      ["Dawn breaks light across the silent floor,", "A golden hour opens at the door.", "The second hand sweeps forward soft and clear,", "A brand new moment arrives gently here."],
+      ["Morning whispers through the fading dark,", "The early sun leaves its radiant mark.", "Time unfolds in quiet, measured grace,", " daylight fills this peaceful space."],
+      ["Cold shadows yield before the morning ray,", "The clock strikes true to start another day.", "A fleeting second turns to silver light,", "As dawn consumes the remnants of the night."]
+    ],
+    midday: [
+      ["Sun stands high above the quiet street,", "Where shadow and light in balance meet.", "The hour turns upon its steady axis,", "While life moves on and time relaxes."],
+      ["Midday stillness holds the turning sphere,", "The present moment burns bright and clear.", "The hands advance without a rustling sound,", "As timeless rhythm circles round and round."],
+      ["The bright noon hour marks its steady pace,", "An etched horizon in a quiet space.", "Each passing minute holds a universe,", "Spun softly into quiet, rhyming verse."]
+    ],
+    dusk: [
+      ["Twilight deepens in the amber skies,", "As evening dusk begins to softly rise.", "The shadows lengthen on the quiet wall,", "While quiet hours answer nighttime's call."],
+      ["Golden light recedes into the night,", "A gentle dimming of the daytime light.", "The ticking hour rests in peaceful calm,", "Evening arrives just like a soothing balm."],
+      ["Dusk draws its curtain on the fading sun,", "Another chapter of the day is done.", "The clock ticks onward through the violet air,", "Leaving a peaceful stillness everywhere."]
+    ],
+    night: [
+      ["Midnight looms in silent, dark repose,", "As shadows deepen and the world slows.", "The clock keeps watch with steady, glowing heart,", "While dreams begin and busy days depart."],
+      ["Stars burn bright across the velvet deep,", "While all the world is cradled soft in sleep.", "A single minute slipping down the glass,", "Watching the quiet, midnight hours pass."],
+      ["Late hours whisper of the quiet room,", "Soft amber light dispels the surrounding gloom.", "Time rests gently in the midnight air,", "A peaceful sanctuary everywhere."]
+    ]
+  };
+
+  function generateLocalPoem(h, m, ampm) {
+    let category = 'midday';
+    if (h >= 5 && h < 11 && ampm === 'AM') category = 'morning';
+    else if ((h === 11 && ampm === 'AM') || (h <= 4 && ampm === 'PM')) category = 'midday';
+    else if (h >= 5 && h < 9 && ampm === 'PM') category = 'dusk';
+    else category = 'night';
+
+    const pool = POETRY_DATABASE[category];
+    const basePoem = pool[(m + h) % pool.length];
+    
+    const timeStr = `${h}:${String(m).padStart(2,'0')} ${ampm}`;
+    const modifiedLine4 = `At ${timeStr}, time flows in quiet verse.`;
+    
+    return [basePoem[0], basePoem[1], basePoem[2], modifiedLine4].join('\n');
+  }
+
+  // ── TIME HELPERS ──────────────────────────────────────────────────────────
   function getNow() {
     const d = new Date();
     let h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
     const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    return {
-      h, m, s, ampm,
-      label: `${h}:${String(m).padStart(2,'0')} ${ampm}`,
-      display: `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`
-    };
+    const displayH = h % 12 || 12;
+    
+    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    
+    const dateStr = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+    const timeLabel = `${displayH}:${String(m).padStart(2,'0')} ${ampm}`;
+    const digitalStr = `${String(displayH).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
+    
+    let period = 'MIDDAY VERSE';
+    if (h >= 5 && h < 12) period = 'MORNING VERSE';
+    else if (h >= 12 && h < 17) period = 'AFTERNOON VERSE';
+    else if (h >= 17 && h < 21) period = 'EVENING VERSE';
+    else period = 'NIGHT VERSE';
+
+    return { h: displayH, rawH: h, m, s, ampm, label: timeLabel, digital: digitalStr, dateStr, period };
   }
 
-  // ── Typewriter ────────────────────────────────────────────────────────────
+  // ── TYPEWRITER EFFECT ─────────────────────────────────────────────────────
   function typeText(text) {
     return new Promise(resolve => {
       typing = true;
       poemEl.innerHTML = '<span class="cursor"></span>';
       let i = 0;
+      const speed = parseInt(localStorage.getItem('vc_speed') || '22');
+
+      if (speed === 0) {
+        poemEl.innerHTML = escapeLines(text) + '<span class="cursor"></span>';
+        typing = false;
+        playBellChime();
+        return resolve();
+      }
 
       function next() {
         if (i >= text.length) {
           poemEl.innerHTML = escapeLines(text) + '<span class="cursor"></span>';
           typing = false;
+          playBellChime();
           return resolve();
         }
         const ch = text[i++];
         poemEl.innerHTML = escapeLines(text.slice(0, i)) + '<span class="cursor"></span>';
-        const delay = ch === '\n' ? 90 : 22 + Math.random() * 18;
+        
+        if (ch !== ' ' && ch !== '\n') {
+          playKeyClick();
+        }
+        
+        const delay = ch === '\n' ? 120 : speed + Math.random() * 12;
         setTimeout(next, delay);
       }
       next();
@@ -398,48 +1140,231 @@
       .replace(/\n/g, '<br>');
   }
 
-  // ── API call ──────────────────────────────────────────────────────────────
-  async function fetchPoem(timeLabel) {
+  // ── API / GENERATION CONTROLLER ───────────────────────────────────────────
+  async function fetchPoem(timeLabel, timeObj) {
     led.classList.add('on');
-    display.classList.add('loading');
+    display.classList.add('eink-refresh');
+    setTimeout(() => display.classList.remove('eink-refresh'), 500);
 
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `Write a short rhyming poem (exactly 4 lines) about the time being ${timeLabel}. Be evocative, precise, and elegant — no whimsy, no clichés. Weave the hour and minute naturally into the verse. No title. No explanation. Only the 4 lines.`
-          }]
-        })
-      });
+    const provider    = localStorage.getItem('vc_provider') || 'openrouter';
+    const openrouterK = localStorage.getItem('vc_openrouter_key') || DEFAULT_OPENROUTER_KEY;
+    const model       = localStorage.getItem('vc_model') || 'anthropic/claude-3.5-sonnet';
+    const anthropicK  = localStorage.getItem('vc_apikey');
+    const style       = localStorage.getItem('vc_style') || 'evocative';
 
-      const data = await res.json();
-      return data.content[0].text.trim();
-    } catch {
-      return `The hour rests at ${timeLabel},\nThe world turns at its own pace,\nA minute sealed in amber light,\nTime etched in silent space.`;
-    } finally {
-      led.classList.remove('on');
-      display.classList.remove('loading');
+    const promptText  = `Write a short rhyming poem (exactly 4 lines) about the time being ${timeLabel} in a ${style} style. Be evocative, precise, and elegant. Weave the time naturally into the poem. Return ONLY the 4 lines.`;
+
+    // 1. OPENROUTER API (Default & User Preferred)
+    if (provider === 'openrouter' && openrouterK && openrouterK.trim().startsWith('sk-or-')) {
+      try {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${openrouterK.trim()}`,
+            'HTTP-Referer': window.location.href,
+            'X-Title': 'Verse Clock VC-02 PRO'
+          },
+          body: JSON.stringify({
+            model: model,
+            max_tokens: 250,
+            messages: [{ role: 'user', content: promptText }]
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const verse = data.choices[0].message.content.trim();
+          const modelTag = model.split('/')[1] || model;
+          poemMeta.textContent = `VERSE #${String(poemCounter).padStart(3,'0')} • OPENROUTER (${modelTag.toUpperCase()})`;
+          saveHistory(timeLabel, verse);
+          return verse;
+        }
+      } catch (e) {
+        console.warn('OpenRouter API error, trying fallback:', e);
+      }
     }
+
+    // 2. ANTHROPIC DIRECT API
+    if (provider === 'anthropic' && anthropicK && anthropicK.trim().startsWith('sk-ant')) {
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': anthropicK.trim(),
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-3-5-sonnet-20241022',
+            max_tokens: 300,
+            messages: [{ role: 'user', content: promptText }]
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const verse = data.content[0].text.trim();
+          poemMeta.textContent = `VERSE #${String(poemCounter).padStart(3,'0')} • ANTHROPIC CLAUDE`;
+          saveHistory(timeLabel, verse);
+          return verse;
+        }
+      } catch (e) {
+        console.warn('Anthropic API error, using local matrix:', e);
+      }
+    }
+
+    // 3. LOCAL MATRIX FALLBACK
+    poemMeta.textContent = `VERSE #${String(poemCounter).padStart(3,'0')} • MATRIX LOCAL`;
+    const localVerse = generateLocalPoem(timeObj.h, timeObj.m, timeObj.ampm);
+    saveHistory(timeLabel, localVerse);
+    return localVerse;
   }
 
-  // ── Main loop ─────────────────────────────────────────────────────────────
-  async function tick() {
-    const t = getNow();
-    timeEl.textContent = t.display;
+  function saveHistory(timeLabel, verse) {
+    historyData.unshift({ time: timeLabel, verse, id: Date.now() });
+    if (historyData.length > 30) historyData.pop();
+    localStorage.setItem('vc_history', JSON.stringify(historyData));
+    poemCounter++;
+    localStorage.setItem('vc_counter', poemCounter.toString());
+  }
 
-    if (t.m !== lastMinute && !typing) {
+  // ── MAIN LOOP ─────────────────────────────────────────────────────────────
+  async function tick(forceRefresh = false) {
+    const t = getNow();
+    digitalTime.textContent = t.digital;
+    periodTag.textContent = t.period;
+    dateBadge.textContent = t.dateStr;
+    secondsFill.style.width = `${(t.s / 59) * 100}%`;
+
+    if ((t.m !== lastMinute || forceRefresh) && !typing) {
       lastMinute = t.m;
-      const poem = await fetchPoem(t.label);
+      const poem = await fetchPoem(t.label, t);
       await typeText(poem);
     }
+    led.classList.remove('on');
   }
 
-  // Init immediately, then poll every second
+  // ── UI EVENT LISTENERS ────────────────────────────────────────────────────
+  // Theme Switching
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const theme = dot.getAttribute('data-t');
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('vc_theme', theme);
+      document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      showToast(`Theme: ${theme.toUpperCase()}`);
+    });
+  });
+
+  // Audio Toggle
+  document.getElementById('audioToggle').addEventListener('click', function() {
+    audioEnabled = !audioEnabled;
+    localStorage.setItem('vc_audio', audioEnabled);
+    this.classList.toggle('active', audioEnabled);
+    if (audioEnabled) getAudioCtx();
+    showToast(audioEnabled ? 'Audio Keystrokes ON' : 'Audio Keystrokes OFF');
+  });
+
+  // Manual Refresh
+  document.getElementById('refreshBtn').addEventListener('click', () => {
+    if (!typing) tick(true);
+  });
+
+  // Fullscreen
+  document.getElementById('fullscreenToggle').addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(()=>{});
+    } else {
+      document.exitFullscreen().catch(()=>{});
+    }
+  });
+
+  // History Drawer
+  const historyOverlay = document.getElementById('historyOverlay');
+  const historyList    = document.getElementById('historyList');
+
+  document.getElementById('historyToggle').addEventListener('click', () => {
+    renderHistory();
+    historyOverlay.classList.add('open');
+  });
+  document.getElementById('closeHistory').addEventListener('click', () => {
+    historyOverlay.classList.remove('open');
+  });
+
+  function renderHistory() {
+    if (historyData.length === 0) {
+      historyList.innerHTML = '<div style="color:#64748b; font-size:12px; text-align:center; padding:20px;">No poem history yet.</div>';
+      return;
+    }
+    historyList.innerHTML = historyData.map(item => `
+      <div class="history-item">
+        <button class="history-copy" onclick="copyPoemText(\`${escapeJsString(item.verse)}\`)">Copy</button>
+        <div class="history-time">${item.time}</div>
+        <div class="history-poem">${escapeLines(item.verse)}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeJsString(str) {
+    return str.replace(/`/g, '\\`').replace(/\${/g, '\\${');
+  }
+
+  window.copyPoemText = function(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Poem copied to clipboard!');
+    });
+  };
+
+  // Settings Modal
+  const settingsOverlay = document.getElementById('settingsOverlay');
+  document.getElementById('settingsToggle').addEventListener('click', () => {
+    settingsOverlay.classList.add('open');
+  });
+  document.getElementById('closeSettings').addEventListener('click', () => {
+    settingsOverlay.classList.remove('open');
+  });
+
+  providerSelect.addEventListener('change', () => {
+    localStorage.setItem('vc_provider', providerSelect.value);
+    showToast(`Provider: ${providerSelect.options[providerSelect.selectedIndex].text}`);
+  });
+  openrouterKeyInput.addEventListener('change', () => {
+    localStorage.setItem('vc_openrouter_key', openrouterKeyInput.value.trim());
+    showToast('OpenRouter Key Saved');
+  });
+  modelSelect.addEventListener('change', () => {
+    localStorage.setItem('vc_model', modelSelect.value);
+    showToast(`Model: ${modelSelect.options[modelSelect.selectedIndex].text}`);
+  });
+  apiKeyInput.addEventListener('change', () => {
+    localStorage.setItem('vc_apikey', apiKeyInput.value.trim());
+    showToast('Anthropic API Key Saved');
+  });
+  styleSelect.addEventListener('change', () => {
+    localStorage.setItem('vc_style', styleSelect.value);
+    showToast('Poetic Style Saved');
+  });
+  speedSelect.addEventListener('change', () => {
+    localStorage.setItem('vc_speed', speedSelect.value);
+    showToast('Typing Speed Saved');
+  });
+
+  // Close overlays on backdrop click
+  [historyOverlay, settingsOverlay].forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target === el) el.classList.remove('open');
+    });
+  });
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  // Initialize
   tick();
   setInterval(tick, 1000);
 </script>

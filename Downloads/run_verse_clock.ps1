@@ -1,7 +1,11 @@
-$htmlPath = "C:\Users\Ganeshnayak\Downloads\verse-clock.html"
+$htmlPath = "$PSScriptRoot\verse-clock.html"
+if (-not (Test-Path $htmlPath)) {
+    $htmlPath = "C:\Users\Ganeshnayak\.claude\agents\coderabbit\verse-clock.html"
+}
+
 $chromePath = "$env:ProgramFiles\Google\Chrome\Application\chrome.exe"
 if (Test-Path $chromePath) {
-    & $chromePath "--app=file:///$htmlPath" "--window-size=400,300" "--window-position=1600,900" "--disable-infobars"
+    & $chromePath "--app=file:///$htmlPath" "--window-size=640,580" "--disable-infobars"
 } else {
-    Write-Error "Chrome not found at $chromePath"
+    Start-Process $htmlPath
 }
