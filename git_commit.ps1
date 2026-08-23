@@ -1,4 +1,3 @@
-git reset --soft HEAD~1
 git add .
-git commit -m "feat(ai): Integrate OpenRouter API support and multi-model selector into Verse Clock"
+git commit -m "feat(aod): Add Always-On Display features (Wake Lock, OLED burn-in protection, idle controls auto-hide, Kiosk launcher)"
 git push

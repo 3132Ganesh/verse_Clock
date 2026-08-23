@@ -1364,7 +1364,63 @@
     setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
+  // ── ALWAYS ON DISPLAY (AOD) & WAKE LOCK FEATURES ─────────────────────────
+  let wakeLock = null;
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        console.log('AOD Screen Wake Lock Active');
+      }
+    } catch (err) {
+      console.warn('Wake Lock error:', err);
+    }
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') requestWakeLock();
+  });
+
+  // Auto-hide controls when idle in Fullscreen / AOD mode
+  let idleTimer = null;
+  const topBar = document.querySelector('.top-bar');
+
+  function resetIdleTimer() {
+    if (topBar) {
+      topBar.style.transition = 'opacity 0.5s ease';
+      topBar.style.opacity = '1';
+      topBar.style.pointerEvents = 'auto';
+    }
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      if (document.fullscreenElement) {
+        if (topBar) {
+          topBar.style.opacity = '0';
+          topBar.style.pointerEvents = 'none';
+        }
+      }
+    }, 3500);
+  }
+
+  window.addEventListener('mousemove', resetIdleTimer);
+  window.addEventListener('keydown', (e) => {
+    resetIdleTimer();
+    if (e.key === 'f' || e.key === 'F') {
+      document.getElementById('fullscreenToggle').click();
+    }
+  });
+
+  // OLED Burn-in Protection (Subtle 0.5px Pixel Shift every 5 min)
+  setInterval(() => {
+    const scene = document.querySelector('.scene');
+    if (scene) {
+      const dx = (Math.random() * 2 - 1).toFixed(1);
+      const dy = (Math.random() * 2 - 1).toFixed(1);
+      scene.style.transform = `translate(${dx}px, ${dy}px)`;
+    }
+  }, 300000);
+
   // Initialize
+  requestWakeLock();
   tick();
   setInterval(tick, 1000);
 </script>
